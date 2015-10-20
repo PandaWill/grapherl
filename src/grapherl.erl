@@ -157,8 +157,8 @@ modules(Dir, Target, Options) ->
             ++ "]",
         {ok, Results} = xref:q(?MODULE, Query),
         Relations = [uses(F, T) || {F, T} <- Results, F =/= T],
-        create(["node [shape = box];"]
-               ++ [["\"" ++ atom_to_list(M) ++ "\"", $;] || M <- Modules]
+        create(["node [shape = box];\n"]
+               ++ [["\"" ++ atom_to_list(M) ++ "\"", ";\n"] || M <- Modules]
                ++ Relations, Target, Options),
         stop_xref(?MODULE)
     catch
@@ -211,7 +211,7 @@ file(Lines) ->
 
 uses(From, To) ->
     ["\"" ++ atom_to_list(From) ++ "\"", " -> ",
-     "\"" ++ atom_to_list(To) ++ "\"", $;].
+     "\"" ++ atom_to_list(To) ++ "\"", ";\n"].
 
 create(Lines, Target, Options) ->
     case dot(file(Lines), Target, get_type(Options, Target)) of
